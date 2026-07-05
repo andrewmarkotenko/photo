@@ -48,37 +48,36 @@ body {
   border-bottom: 2px solid #fff;
 }
 
+/* --- UNIFIED FILTER NAVIGATION --- */
 .filter-nav {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 24px;
   margin-bottom: 50px;
 }
 
 .filter-btn {
   background: transparent;
-  border: 1px solid #222;
-  color: #999;
-  padding: 8px 20px;
+  border: none;
+  color: #666;
+  padding: 6px 0;
   cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease;
   font-size: 0.9rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
 }
 
 .filter-btn:hover {
-  color: #fff;
-  border-color: #444;
+  color: #bbb;
 }
 
 .filter-btn.active {
-  background-color: #ffffff;
-  color: #0d0d0d;
-  border-color: #ffffff;
+  color: #ffffff;
+  border-bottom: 2px solid #ffffff;
 }
 
+/* --- MASONRY GRID --- */
 .masonry-grid {
   column-count: 3;
   column-gap: 20px;
@@ -111,6 +110,7 @@ body {
   grid-column: 1 / -1;
 }
 
+/* --- ABOUT & CONTACT MODULE --- */
 .profile-section {
   margin-top: 100px;
   border-top: 1px solid #222;
@@ -144,42 +144,31 @@ body {
   margin-bottom: 30px;
 }
 
+/* Horizontal alignment for contact links matching categories */
 .contact-links {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  flex-direction: row;
+  gap: 24px;
 }
 
-.contact-btn {
+.contact-link {
   display: inline-block;
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 12px 24px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  font-weight: 500;
+  letter-spacing: 1.5px;
+  color: #666;
+  transition: color 0.2s ease;
+  padding: 6px 0;
 }
 
-.email-btn {
-  background-color: #ffffff;
-  color: #0d0d0d;
-}
-.email-btn:hover {
-  background-color: #cccccc;
+.contact-link:hover {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 6px;
 }
 
-.insta-btn, .whatsapp-btn {
-  background-color: transparent;
-  color: #f5f5f5;
-  border: 1px solid #333;
-}
-.insta-btn:hover, .whatsapp-btn:hover {
-  border-color: #fff;
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
+/* --- LIGHTBOX --- */
 .lightbox {
   display: none;
   position: fixed;
@@ -252,4 +241,6 @@ body {
 @media (max-width: 480px) {
   .masonry-grid { column-count: 1; }
   .site-header { flex-direction: column; gap: 15px; }
+  .filter-nav, .contact-links { flex-wrap: wrap; gap: 16px; justify-content: center; }
 }
+
