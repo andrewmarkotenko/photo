@@ -1,272 +1,74 @@
+/* --- 1. GLOBAL RESET & BASE --- */
+* { box-sizing: border-box; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
 body {
-  margin: 0;
-  background-color: #0d0d0d;
-  color: #f5f5f5;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  padding: 60px 40px;
-  -webkit-font-smoothing: antialiased;
+  margin: 0; background: #0d0d0d; color: #f5f5f5; padding: 60px 40px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased;
 }
 
-/* --- PREMIUM EDITORIAL HEADER --- */
-.site-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  max-width: 1600px;
-  margin: 0 auto 80px auto;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  padding-bottom: 30px;
-}
+/* --- 2. FLEX & GRID ARCHITECTURE --- */
+.site-header, .filter-nav, .profile-section, .masonry-grid { max-width: 1600px; margin: 0 auto; }
+.site-header, .lang-switcher, .filter-nav, .contact-links { display: flex; gap: 16px; }
+.site-header { justify-content: space-between; align-items: baseline; margin-bottom: 80px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 30px; }
+.filter-nav { gap: 40px; margin-bottom: 60px; }
 
-.site-header h1 {
-  margin: 0;
-  font-weight: 200;
-  letter-spacing: 6px;
-  text-transform: uppercase;
-  font-size: 2.2rem;
-}
+/* Structural grids */
+.profile-container, .masonry-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px 30px; }
+.profile-section { margin-top: 160px; border-top: 1px solid rgba(255,255,255,0.06); padding: 80px 0 60px; }
 
-.lang-switcher {
-  display: flex;
-  gap: 16px;
-}
+/* Fixed layout positions */
+.profile-about { grid-column: span 7; }
+.profile-contact { grid-column: span 5; }
 
-.lang-btn {
-  background: transparent;
-  border: none;
-  color: #444;
-  font-size: 0.8rem;
-  font-weight: 400;
-  letter-spacing: 2px;
-  cursor: pointer;
-  padding: 4px 0;
-  transition: color 0.3s ease;
-}
+/* --- 3. TYPOGRAPHY SYSTEM --- */
+h1, h2 { font-weight: 200; text-transform: uppercase; letter-spacing: 4px; margin: 0; color: #fff; }
+h1 { font-size: 2.2rem; letter-spacing: 6px; }
+h2 { font-size: 1.6rem; margin-bottom: 30px; }
+p { color: #888; line-height: 1.8; font-size: 1.05rem; font-weight: 300; margin: 0 0 40px; max-width: 650px; }
 
-.lang-btn:hover, .lang-btn.active {
-  color: #fff;
+/* Universal navigation link engine */
+.lang-btn, .filter-btn, .contact-link {
+  background: transparent; border: none; color: #444; cursor: pointer; padding: 4px 0;
+  text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; text-decoration: none; width: fit-content;
 }
+.filter-btn { letter-spacing: 3px; padding: 8px 0; }
+.contact-link { color: #555; }
 
-.lang-btn.active {
-  border-bottom: 1px solid #fff;
-}
+.lang-btn:hover, .filter-btn:hover, .contact-link:hover { color: #bbb; }
+.contact-link:hover { color: #fff; text-decoration: underline; text-underline-offset: 6px; }
+.active { color: #fff !important; border-bottom: 1px solid #fff; }
+.contact-links { gap: 40px; }
 
-/* --- MINIMALIST ROW NAVIGATION --- */
-.filter-nav {
-  display: flex;
-  justify-content: flex-start;
-  gap: 40px;
-  max-width: 1600px;
-  margin: 0 auto 60px auto;
-}
+/* --- 4. CARDS & GALERIES --- */
+.grid-item { margin: 0; overflow: hidden; grid-column: span 4; }
+.grid-item:first-child { grid-column: span 8; margin-bottom: 20px; }
+.grid-item:nth-child(3n) { margin-top: 40px; }
+.grid-item img { width: 100%; display: block; filter: grayscale(15%); animation: fIn 1s ease both; }
+.grid-item img:hover { transform: scale(1.03); filter: grayscale(0%); }
+.no-photos { grid-column: 1 / -1; text-align: center; color: #444; letter-spacing: 2px; text-transform: uppercase; padding: 100px 0; }
 
-.filter-btn {
-  background: transparent;
-  border: none;
-  color: #444;
-  padding: 8px 0;
-  cursor: pointer;
-  transition: color 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-}
-
-.filter-btn:hover {
-  color: #888;
-}
-
-.filter-btn.active {
-  color: #ffffff;
-  border-bottom: 1px solid #ffffff;
-}
-
-/* --- ASYMMETRICAL LUXURY MASONRY GRID --- */
-.masonry-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 40px 30px;
-  width: 100%;
-  max-width: 1600px;
-  margin: 0 auto;
-}
-
-.grid-item {
-  margin: 0;
-  padding: 0;
-  grid-column: span 4;
-  overflow: hidden;
-}
-
-.grid-item:first-child {
-  grid-column: span 8;
-  margin-bottom: 20px;
-}
-
-.grid-item:nth-child(3n) {
-  margin-top: 40px;
-}
-
-.grid-item img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease;
-  filter: grayscale(15%);
-  animation: elegantFadeIn 1s cubic-bezier(0.25, 1, 0.5, 1) both;
-}
-
-.grid-item img:hover {
-  transform: scale(1.03);
-  filter: grayscale(0%);
-}
-
-.no-photos {
-  grid-column: 1 / -1;
-  text-align: center;
-  color: #444;
-  font-size: 1rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 100px 0;
-}
-
-/* --- MAGAZINE-STYLE PROFILE FOOTER --- */
-.profile-section {
-  margin-top: 160px;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  padding-top: 80px;
-  padding-bottom: 60px;
-  width: 100%;
-  max-width: 1600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.profile-container {
-  display: grid;
-  grid-template-columns: 7fr 5fr;
-  gap: 100px;
-}
-
-.profile-about h2, .profile-contact h2 {
-  font-weight: 200;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  font-size: 1.6rem;
-  margin-bottom: 30px;
-  color: #fff;
-}
-
-.profile-about p, .profile-contact p {
-  color: #888;
-  line-height: 1.8;
-  font-size: 1.05rem;
-  font-weight: 300;
-  margin-bottom: 40px;
-  max-width: 650px;
-}
-
-.contact-links {
-  display: flex;
-  flex-direction: row;
-  gap: 40px;
-}
-
-.contact-link {
-  display: inline-block;
-  text-decoration: none;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #555;
-  transition: color 0.3s ease;
-  padding: 4px 0;
-}
-
-.contact-link:hover {
-  color: #ffffff;
-  border-bottom: 1px solid #ffffff;
-}
-
-/* --- PREMIUM LIGHTBOX MODAL --- */
-.lightbox {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #060606;
-  justify-content: center;
-  align-items: center;
-}
-
-.lightbox.active {
-  display: flex;
-}
-
-.lightbox-content {
-  max-width: 90%;
-  max-height: 80vh;
-  object-fit: contain;
-  user-select: none;
-  animation: scaleUp 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.lightbox-close {
-  position: absolute;
-  top: 40px;
-  right: 40px;
-  color: #444;
-  font-size: 32px;
-  font-weight: 100;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-.lightbox-close:hover { color: #fff; }
-
-.lightbox-nav {
-  position: absolute;
-  background: transparent;
-  border: none;
-  color: #333;
-  font-size: 24px;
-  font-weight: 100;
-  padding: 40px;
-  cursor: pointer;
-  transition: color 0.3s;
-  user-select: none;
-}
-.lightbox-nav:hover { color: #fff; }
+/* --- 5. LIGHTBOX OVERLAY --- */
+.lightbox { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: #060606; justify-content: center; align-items: center; }
+.lightbox.active { display: flex; }
+.lightbox-content { max-width: 90%; max-height: 80vh; object-fit: contain; user-select: none; animation: sUp 0.4s ease; }
+.lightbox-close, .lightbox-nav { position: absolute; background: transparent; border: none; color: #333; font-weight: 100; cursor: pointer; padding: 40px; }
+.lightbox-close { top: 40px; right: 40px; font-size: 32px; color: #444; }
+.lightbox-nav { font-size: 24px; }
+.lightbox-close:hover, .lightbox-nav:hover { color: #fff; }
 .lightbox-nav.prev { left: 40px; }
 .lightbox-nav.next { right: 40px; }
 
-/* --- LUXURY ANIMATIONS --- */
-@keyframes elegantFadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+@keyframes fIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes sUp { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
 
-@keyframes scaleUp {
-  from { opacity: 0; transform: scale(0.97); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-/* --- MOBILE RESPONSIVE TUNING --- */
+/* --- 6. CLEAN MEDIA BREAKPOINTS --- */
 @media (max-width: 1024px) {
-  .masonry-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; }
-  .grid-item, .grid-item:first-child { grid-column: span 1; margin-top: 0 !important; }
-  .profile-container { grid-template-columns: 1fr; gap: 60px; }
   body { padding: 40px 20px; }
+  .profile-container, .masonry-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; }
+  .grid-item, .grid-item:first-child, .profile-about, .profile-contact { grid-column: span 1; margin-top: 0 !important; }
 }
-
 @media (max-width: 480px) {
-  .masonry-grid { grid-template-columns: 1fr; }
+  .profile-container, .masonry-grid { grid-template-columns: 1fr; }
   .site-header { flex-direction: column; align-items: flex-start; gap: 20px; }
-  .filter-nav { gap: 20px; flex-wrap: wrap; }
-  .contact-links { gap: 20px; flex-wrap: wrap; }
+  .filter-nav, .contact-links { gap: 20px; flex-wrap: wrap; }
 }
 
