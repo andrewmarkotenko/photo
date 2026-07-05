@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography Portfolio</title>
+</head>
+<body>
+    <header class="site-header">
+        <h1 data-i18n="mainTitle">Portfolio</h1>
+        
+        <div class="lang-switcher">
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="uk">UA</button>
+        </div>
+    </header>
+    
+    <main id="app">
+        <!-- "All" button removed to focus on specific genres -->
+        <nav class="filter-nav">
+            <button class="filter-btn active" data-category="Headshots">Headshots</button>
+            <button class="filter-btn" data-category="Art">Art</button>
+            <button class="filter-btn" data-category="Lifestyle">Lifestyle</button>
+        </nav>
+
+        <div id="gallery-root" class="masonry-grid"></div>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
+
