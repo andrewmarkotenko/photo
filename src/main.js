@@ -5,18 +5,25 @@ const translations = {
   en: {
     mainTitle: "Photography Portfolio",
     noPhotos: "No photos found in this category.",
-    photoAlt: "Photo from project"
+    photoAlt: "Photo from project",
+    aboutTitle: "About Me",
+    aboutText: "Professional photographer based in Canada, specializing in premium headshots, conceptual art, and lifestyle storytelling.",
+    contactTitle: "Book a Session",
+    contactText: "Let's discuss your next project or photo session concept."
   },
   uk: {
     mainTitle: "Портфоліо Фотографа",
     noPhotos: "У цій категорії поки немає фотографій.",
-    photoAlt: "Фото з проекту"
+    photoAlt: "Фото з проекту",
+    aboutTitle: "Про мене",
+    aboutText: "Професійний фотограф у Канаді, що спеціалізується на преміальних портретах (headshots), концептуальному арті та лайфстайл зйомках.",
+    contactTitle: "Забронювати зйомку",
+    contactText: "Обговорімо ваш наступний проект або концепцію фотосесії."
   }
 };
 
 let currentLang = localStorage.getItem('site-lang') || 'en';
 
-// Determine initial category safely from JSON array or fallback to a hardcoded safe string
 let initialCategory = 'Headshots';
 if (projects && projects.length > 0 && projects[0].category) {
   initialCategory = projects[0].category;
@@ -98,7 +105,6 @@ function renderGallery() {
   `).join('');
 }
 
-// Set up language buttons event handlers
 document.querySelectorAll('.lang-btn').forEach(btn => {
   if (btn.getAttribute('data-lang') === currentLang) btn.classList.add('active');
   else btn.classList.remove('active');
@@ -115,7 +121,6 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
   });
 });
 
-// Set up category buttons event handlers
 document.querySelectorAll('.filter-btn').forEach(button => {
   button.addEventListener('click', (e) => {
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
@@ -128,7 +133,6 @@ document.querySelectorAll('.filter-btn').forEach(button => {
   });
 });
 
-// --- LIGHTBOX IMPL ---
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
 const closeBtn = document.querySelector('.lightbox-close');
@@ -195,7 +199,6 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowLeft') prevPhoto();
 });
 
-// Run orchestrations
 translateInterface();
 initActiveCategoryUI();
 renderGallery();

@@ -16,15 +16,39 @@
     </header>
     
     <main id="app">
-        <!-- "All" button removed to focus on specific genres -->
         <nav class="filter-nav">
-            <button class="filter-btn active" data-category="Headshots">Headshots</button>
+            <button class="filter-btn" data-category="Headshots">Headshots</button>
             <button class="filter-btn" data-category="Art">Art</button>
             <button class="filter-btn" data-category="Lifestyle">Lifestyle</button>
         </nav>
 
         <div id="gallery-root" class="masonry-grid"></div>
+
+        <footer class="profile-section">
+            <div class="profile-container">
+                <div class="profile-about">
+                    <h2 data-i18n="aboutTitle">About Me</h2>
+                    <p data-i18n="aboutText">Professional photographer based in Canada, specializing in premium headshots, conceptual art, and lifestyle storytelling.</p>
+                </div>
+                <div class="profile-contact">
+                    <h2 data-i18n="contactTitle">Book a Session</h2>
+                    <p data-i18n="contactText">Let's discuss your next project or photo session concept.</p>
+                    <div class="contact-links">
+                        <a href="mailto:your.email@gmail.com" class="contact-btn email-btn">Email Me</a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener" class="contact-btn insta-btn">Instagram</a>
+                        <a href="https://wa.me" target="_blank" rel="noopener" class="contact-btn whatsapp-btn">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </main>
+
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <button class="lightbox-nav prev">&#10094;</button>
+        <img class="lightbox-content" id="lightbox-img" src="" alt="">
+        <button class="lightbox-nav next">&#10095;</button>
+    </div>
 
     <script type="module" src="/src/main.js"></script>
 </body>
