@@ -1,0 +1,44 @@
+[
+  {
+    "id": "art-gallery",
+    "title": {
+      "en": "art Collection",
+      "uk": "Колекція art"
+    },
+    "category": "art",
+    "images": [
+      "/src/images/art/_MG_5784.webp",
+      "/src/images/art/_MG_5787.webp",
+      "/src/images/art/_MG_5788.webp",
+      "/src/images/art/_MG_5791.webp"
+    ]
+  },
+  {
+    "id": "headshots-gallery",
+    "title": {
+      "en": "headshots Collection",
+      "uk": "Колекція headshots"
+    },
+    "category": "headshots",
+    "images": [
+      "/src/images/headshots/_MG_5793.webp",
+      "/src/images/headshots/_MG_5799.webp",
+      "/src/images/headshots/_MG_5803.webp",
+      "/src/images/headshots/_MG_5808.webp"
+    ]
+  },
+  {
+    "id": "lifestyle-gallery",
+    "title": {
+      "en": "lifestyle Collection",
+      "uk": "Колекція lifestyle"
+    },
+    "category": "lifestyle",
+    "images": [
+      "/src/images/lifestyle/20260704-0039.webp",
+      "/src/images/lifestyle/20260704-0050.webp",
+      "/src/images/lifestyle/20260704-0056.webp",
+      "/src/images/lifestyle/20260704-0059.webp"
+    ]
+  }
+]

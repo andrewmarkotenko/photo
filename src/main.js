@@ -9,7 +9,10 @@ const translations = {
     aboutTitle: "About Me",
     aboutText: "Professional photographer based in Canada, specializing in premium headshots, conceptual art, and lifestyle storytelling.",
     contactTitle: "Book a Session",
-    contactText: "Let's discuss your next project or photo session concept."
+    contactText: "Let's discuss your next project or photo session concept.",
+    catHeadshots: "Headshots",
+    catArt: "Art",
+    catLifestyle: "Lifestyle"
   },
   uk: {
     mainTitle: "Портфоліо Фотографа",
@@ -18,7 +21,10 @@ const translations = {
     aboutTitle: "Про мене",
     aboutText: "Професійний фотограф у Канаді, що спеціалізується на преміальних портретах (headshots), концептуальному арті та лайфстайл зйомках.",
     contactTitle: "Забронювати зйомку",
-    contactText: "Обговорімо ваш наступний проект або концепцію фотосесії."
+    contactText: "Обговорімо ваш наступний проект або концепцію фотосесії.",
+    catHeadshots: "Портрети",
+    catArt: "Арт",
+    catLifestyle: "Лайфстайл"
   }
 };
 
