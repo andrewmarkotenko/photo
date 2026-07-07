@@ -3,28 +3,34 @@ import projects from './data/projects.json';
 
 const translations = {
   en: {
-    mainTitle: "Photography Portfolio",
+    mainTitle: "Photography",
     noPhotos: "No photos found in this category.",
     photoAlt: "Photo from project",
     aboutTitle: "About Me",
+    callMe: "Call me",
     aboutText: "Professional photographer based in Canada, specializing in premium headshots, conceptual art, and lifestyle storytelling.",
     contactTitle: "Book a Session",
     contactText: "Let's discuss your next project or photo session concept.",
     catHeadshots: "Headshots",
     catArt: "Art",
-    catLifestyle: "Lifestyle"
+    catLifestyle: "Lifestyle",
+    catTheatre: "Theatre",
+    catNature: "Nature"
   },
   uk: {
-    mainTitle: "Портфоліо Фотографа",
+    mainTitle: "Фотографія",
     noPhotos: "У цій категорії поки немає фотографій.",
     photoAlt: "Фото з проекту",
     aboutTitle: "Про мене",
+    callMe: "Дзвоніть мені",
     aboutText: "Професійний фотограф у Канаді, що спеціалізується на преміальних портретах (headshots), концептуальному арті та лайфстайл зйомках.",
     contactTitle: "Забронювати зйомку",
     contactText: "Обговорімо ваш наступний проект або концепцію фотосесії.",
     catHeadshots: "Портрети",
     catArt: "Арт",
-    catLifestyle: "Лайфстайл"
+    catLifestyle: "Лайфстайл",
+    catTheatre: "Театр",
+    catNature: "Природа"
   }
 };
 
