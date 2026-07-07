@@ -7,10 +7,10 @@
     },
     "category": "art",
     "images": [
-      "/photo/src/images/art/_MG_5784.webp",
-      "/photo/src/images/art/_MG_5787.webp",
-      "/photo/src/images/art/_MG_5788.webp",
-      "/photo/src/images/art/_MG_5791.webp"
+      "images/art/_MG_5784.webp",
+      "images/art/_MG_5787.webp",
+      "images/art/_MG_5788.webp",
+      "images/art/_MG_5791.webp"
     ]
   },
   {
@@ -21,10 +21,10 @@
     },
     "category": "headshots",
     "images": [
-      "/photo/src/images/headshots/_MG_5793.webp",
-      "/photo/src/images/headshots/_MG_5799.webp",
-      "/photo/src/images/headshots/_MG_5803.webp",
-      "/photo/src/images/headshots/_MG_5808.webp"
+      "images/headshots/_MG_5793.webp",
+      "images/headshots/_MG_5799.webp",
+      "images/headshots/_MG_5803.webp",
+      "images/headshots/_MG_5808.webp"
     ]
   },
   {
@@ -35,10 +35,10 @@
     },
     "category": "lifestyle",
     "images": [
-      "/photo/src/images/lifestyle/20260704-0039.webp",
-      "/photo/src/images/lifestyle/20260704-0050.webp",
-      "/photo/src/images/lifestyle/20260704-0056.webp",
-      "/photo/src/images/lifestyle/20260704-0059.webp"
+      "images/lifestyle/20260704-0039.webp",
+      "images/lifestyle/20260704-0050.webp",
+      "images/lifestyle/20260704-0056.webp",
+      "images/lifestyle/20260704-0059.webp"
     ]
   }
 ]

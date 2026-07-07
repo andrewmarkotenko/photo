@@ -4,7 +4,7 @@ import fsPromises from 'fs/promises';
 import path from 'path';
 
 const ORIGINALS_DIR = path.join(process.cwd(), 'originals');
-const OUTPUT_DIR = path.join(process.cwd(), 'src', 'images');
+const OUTPUT_DIR = path.join(process.cwd(), 'public', 'images');
 const DATA_FILE = path.join(process.cwd(), 'src', 'data', 'projects.json');
 const MAX_WIDTH = 1920; 
 
@@ -38,7 +38,7 @@ async function optimizeImages() {
         const inputFilePath = path.join(categoryPath, file);
         const outputFileName = `${path.parse(file).name}.webp`;
         const outputFilePath = path.join(OUTPUT_DIR, category, outputFileName);
-        const webpPublicPath = `/src/images/${category}/${outputFileName}`;
+        const webpPublicPath = `images/${category}/${outputFileName}`;
 
         console.log(`⚡ Processing: ${category}/${file}...`);
 
@@ -64,7 +64,7 @@ async function optimizeImages() {
     }
 
     await fsPromises.writeFile(DATA_FILE, JSON.stringify(projectsData, null, 2));
-    console.log('✨ Success! src/images/ and projects.json updated.');
+    console.log('✨ Success! public/images/ and projects.json updated.');
 
   } catch (error) {
     console.error('❌ Processing Error:', error);
@@ -72,4 +72,3 @@ async function optimizeImages() {
 }
 
 optimizeImages();
-
