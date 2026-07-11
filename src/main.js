@@ -1,5 +1,5 @@
 import './style.css';
-import projects from './data/projects.json';
+import staticProjects from './data/projects.json';
 
 const translations = {
   en: {
@@ -40,7 +40,7 @@ const translations = {
     callMe: "Appelez-moi",
     aboutText: "Photographe professionnel basé au Canada, spécialisé dans les portraits haut de gamme, l'art conceptuel et le storytelling lifestyle.",
     contactTitle: "Réserver une Session",
-    contactText: "Discutons de votre prochain projet ou concept de séance photo.",
+    contactText: "Discutons de votre prochain project ou concept de séance photo.",
     catHeadshots: "Portraits",
     catArt: "Art",
     catLifestyle: "Lifestyle",
@@ -50,19 +50,41 @@ const translations = {
 };
 
 let currentLang = localStorage.getItem('site-lang') || 'en';
+let currentCategory = localStorage.getItem('site-category') || 'Headshots';
+let projectsDataMemory = []; // Local memory buffer cache for synced runtime reads
 
-let initialCategory = 'Headshots';
-if (projects && projects.length > 0 && projects[0].category) {
-  initialCategory = projects[0].category;
+// Safely pull latest dataset from filesystem using runtime fallback checks
+async function fetchProjectsRegistry() {
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  
+  if (isLocal) {
+    try {
+      // Direct call via Vite config proxy. If Admin panel is active, returns fresh file states instantly.
+      const res = await fetch(`/photo/api/live-data?t=${Date.now()}`);
+      if (res.ok) {
+        projectsDataMemory = await res.json();
+        return;
+      }
+    } catch (err) {
+      // In case local admin is turned off, catch pipeline silently drops to standard static imports
+    }
+  }
+  
+  // Standard Production compile-time fallback execution mapping (GitHub Pages execution context)
+  projectsDataMemory = staticProjects || [];
 }
 
-let storedCategory = localStorage.getItem('site-category');
-if (!storedCategory || storedCategory === 'undefined' || storedCategory === 'null') {
-  storedCategory = initialCategory;
-  localStorage.setItem('site-category', storedCategory);
+// Helper function to evaluate valid categories dynamically from the current state of projects
+function getLiveCategories() {
+  const dynamicCategories = Array.from(
+    new Set(
+      projectsDataMemory
+        .filter(p => p.category && p.category !== 'Uncategorized' && p.images && p.images.length > 0)
+        .map(p => p.category)
+    )
+  );
+  return dynamicCategories;
 }
-
-let currentCategory = storedCategory;
 
 function translateInterface() {
   document.documentElement.lang = currentLang;
@@ -73,52 +95,67 @@ function translateInterface() {
       element.textContent = translations[currentLang][key];
     }
   });
+
+  renderCategoryNav();
 }
 
-function initActiveCategoryUI() {
-  const buttons = document.querySelectorAll('.filter-btn');
-  if (buttons.length === 0) return;
+function renderCategoryNav() {
+  const navRoot = document.getElementById('filter-nav-root');
+  if (!navRoot) return;
 
-  let matchFound = false;
-  buttons.forEach(btn => {
-    const btnCat = btn.getAttribute('data-category');
-    if (btnCat && btnCat.toLowerCase() === currentCategory.toLowerCase()) {
-      btn.classList.add('active');
-      matchFound = true;
-    } else {
-      btn.classList.remove('active');
-    }
-  });
+  const liveCategories = getLiveCategories();
 
-  if (!matchFound && buttons[0]) {
-    buttons[0].classList.add('active');
-    currentCategory = buttons[0].getAttribute('data-category') || 'Headshots';
+  if (liveCategories.length === 0) {
+    navRoot.innerHTML = '';
+    return;
+  }
+
+  // If the active category completely disappeared due to admin changes, safely re-route pointers
+  if (!liveCategories.includes(currentCategory)) {
+    currentCategory = liveCategories[0];
     localStorage.setItem('site-category', currentCategory);
   }
+
+  navRoot.innerHTML = liveCategories.map(cat => {
+    const i18nKey = `cat${cat}`;
+    const label = translations[currentLang][i18nKey] || cat;
+    const activeClass = cat.toLowerCase() === currentCategory.toLowerCase() ? 'active' : '';
+    return `<button class="filter-btn ${activeClass}" data-category="${cat}">${label}</button>`;
+  }).join('');
+
+  // Explicit target binding cleanup to prevent execution locks
+  navRoot.querySelectorAll('.filter-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
+      navRoot.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      e.target.classList.add('active');
+
+      currentCategory = e.target.getAttribute('data-category');
+      localStorage.setItem('site-category', currentCategory);
+      
+      renderGallery();
+    });
+  });
 }
 
 function renderGallery() {
   const galleryRoot = document.getElementById('gallery-root');
   if (!galleryRoot) return;
   
-  const filteredProjects = projects.filter(
+  if (projectsDataMemory.length === 0) {
+    galleryRoot.innerHTML = `<p class="no-photos">${translations[currentLang].noPhotos}</p>`;
+    return;
+  }
+
+  const filteredProjects = projectsDataMemory.filter(
     p => p.category && p.category.toLowerCase() === currentCategory.toLowerCase()
   );
 
   const allImages = filteredProjects.flatMap(project => 
-    project.images.map(imgUrl => ({
-      url: imgUrl,
-      alt: project.title[currentLang] || project.title['en']
+    (project.images || []).map(imgObj => ({
+      url: imgObj.url,
+      alt: imgObj.alt ? (imgObj.alt[currentLang] || imgObj.alt['en']) : translations[currentLang].photoAlt
     }))
   );
-
-  if (allImages.length === 0 && projects.length > 0 && projects[0].category) {
-    currentCategory = projects[0].category;
-    localStorage.setItem('site-category', currentCategory);
-    initActiveCategoryUI();
-    renderGallery();
-    return;
-  }
 
   if (allImages.length === 0) {
     galleryRoot.innerHTML = `<p class="no-photos">${translations[currentLang].noPhotos}</p>`;
@@ -148,18 +185,6 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
   });
 });
 
-document.querySelectorAll('.filter-btn').forEach(button => {
-  button.addEventListener('click', (e) => {
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    e.target.classList.add('active');
-
-    currentCategory = e.target.getAttribute('data-category');
-    localStorage.setItem('site-category', currentCategory);
-    
-    renderGallery();
-  });
-});
-
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
 const closeBtn = document.querySelector('.lightbox-close');
@@ -169,7 +194,6 @@ const nextBtn = document.querySelector('.lightbox-nav.next');
 let currentIndex = 0;
 let currentPhotosList = [];
 
-// Step 1: Click on gallery image opens browser-level lightbox
 document.body.addEventListener('click', (e) => {
   if (e.target.matches('#gallery-root img')) {
     const allRenderedImgs = Array.from(document.querySelectorAll('#gallery-root img'));
@@ -190,10 +214,9 @@ function showLightbox() {
   document.body.style.overflow = 'hidden';
 }
 
-// Step 2: Click on lightbox image triggers true monitor fullscreen mode
 if (lightboxImg) {
   lightboxImg.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevent closing lightbox when clicking the image
+    e.stopPropagation();
     
     if (!document.fullscreenElement && !document.webkitFullscreenElement) {
       if (lightbox.requestFullscreen) {
@@ -252,6 +275,20 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowLeft') prevPhoto();
 });
 
-translateInterface();
-initActiveCategoryUI();
-renderGallery();
+// App core bootstrapper sequencing pipeline orchestration
+async function bootSystem() {
+  await fetchProjectsRegistry();
+  translateInterface();
+  renderGallery();
+}
+
+// Automatically sync UI graphics state when focus shifts back to the portfolio app view context
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible') {
+    await fetchProjectsRegistry();
+    renderCategoryNav();
+    renderGallery();
+  }
+});
+
+bootSystem();

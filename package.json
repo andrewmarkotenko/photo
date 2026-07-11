@@ -7,11 +7,15 @@
     "dev": "vite",
     "optimize": "node optimize.js",
     "build": "npm run optimize && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "admin": "node admin.js"
   },
   "devDependencies": {
     "sharp": "^0.33.5",
     "vite": "^5.4.11"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "open": "^10.1.0"
   }
 }
-
