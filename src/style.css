@@ -53,12 +53,21 @@ p { color: #888; line-height: 1.8; font-size: 1.05rem; font-weight: 300; margin:
   justify-content: center; align-items: center; pointer-events: auto;
   transition: none !important;
 }
+
+/* Ensure background color persists in native monitor fullscreen mode */
+.lightbox:fullscreen {
+  display: flex !important;
+  background: #060606;
+}
+
 body .lightbox.active { display: flex !important; }
+
 .lightbox-content { 
-  max-width: 95vw; max-height: 95vh; object-fit: contain; 
+  max-width: 100vw; max-height: 100vh; width: auto; height: auto; object-fit: contain; 
   user-select: none; animation: sUp 0.2s cubic-bezier(0.25, 1, 0.5, 1); 
   transition: none !important;
 }
+
 .lightbox-close, .lightbox-nav { 
   position: absolute; background: transparent; border: none; 
   color: #888; cursor: pointer; padding: 20px; z-index: 10001;
