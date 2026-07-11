@@ -47,18 +47,31 @@ p { color: #888; line-height: 1.8; font-size: 1.05rem; font-weight: 300; margin:
 .no-photos { grid-column: 1 / -1; text-align: center; color: #444; letter-spacing: 2px; text-transform: uppercase; padding: 100px 0; }
 
 /* --- 5. LIGHTBOX OVERLAY --- */
-.lightbox { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: #060606; justify-content: center; align-items: center; }
-.lightbox.active { display: flex; }
-.lightbox-content { max-width: 90%; max-height: 80vh; object-fit: contain; user-select: none; animation: sUp 0.4s ease; }
-.lightbox-close, .lightbox-nav { position: absolute; background: transparent; border: none; color: #333; font-weight: 100; cursor: pointer; padding: 40px; }
-.lightbox-close { top: 40px; right: 40px; font-size: 32px; color: #444; }
-.lightbox-nav { font-size: 24px; }
+.lightbox { 
+  display: none; position: fixed; z-index: 10000; top: 0; left: 0; 
+  width: 100vw; height: 100vh; background: rgba(6, 6, 6, 0.95); 
+  justify-content: center; align-items: center; pointer-events: auto;
+  transition: none !important;
+}
+body .lightbox.active { display: flex !important; }
+.lightbox-content { 
+  max-width: 95vw; max-height: 95vh; object-fit: contain; 
+  user-select: none; animation: sUp 0.2s cubic-bezier(0.25, 1, 0.5, 1); 
+  transition: none !important;
+}
+.lightbox-close, .lightbox-nav { 
+  position: absolute; background: transparent; border: none; 
+  color: #888; cursor: pointer; padding: 20px; z-index: 10001;
+  transition: color 0.2s ease !important;
+}
 .lightbox-close:hover, .lightbox-nav:hover { color: #fff; }
-.lightbox-nav.prev { left: 40px; }
-.lightbox-nav.next { right: 40px; }
+.lightbox-close { top: 20px; right: 20px; font-size: 40px; line-height: 1; }
+.lightbox-nav { font-size: 50px; }
+.lightbox-nav.prev { left: 20px; }
+.lightbox-nav.next { right: 20px; }
 
 @keyframes fIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes sUp { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+@keyframes sUp { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
 /* --- 6. CLEAN MEDIA BREAKPOINTS --- */
 @media (max-width: 1024px) {
@@ -71,4 +84,3 @@ p { color: #888; line-height: 1.8; font-size: 1.05rem; font-weight: 300; margin:
   .site-header { flex-direction: column; align-items: flex-start; gap: 20px; }
   .filter-nav, .contact-links { gap: 20px; flex-wrap: wrap; }
 }
-

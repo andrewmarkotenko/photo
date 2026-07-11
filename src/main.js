@@ -3,7 +3,7 @@ import projects from './data/projects.json';
 
 const translations = {
   en: {
-    mainTitle: "Photography",
+    mainTitle: "AndyMark Photography",
     noPhotos: "No photos found in this category.",
     photoAlt: "Photo from project",
     aboutTitle: "About Me",
@@ -18,7 +18,7 @@ const translations = {
     catNature: "Nature"
   },
   uk: {
-    mainTitle: "Фотографія",
+    mainTitle: "АндіМарк Фотограф",
     noPhotos: "У цій категорії поки немає фотографій.",
     photoAlt: "Фото з проекту",
     aboutTitle: "Про мене",
@@ -154,17 +154,14 @@ const nextBtn = document.querySelector('.lightbox-nav.next');
 let currentIndex = 0;
 let currentPhotosList = [];
 
-const galleryContainer = document.getElementById('gallery-root');
-if (galleryContainer) {
-  galleryContainer.addEventListener('click', (e) => {
-    if (e.target.tagName === 'IMG') {
-      const allRenderedImgs = Array.from(document.querySelectorAll('#gallery-root img'));
-      currentPhotosList = allRenderedImgs.map(img => ({ src: img.src, alt: img.alt }));
-      currentIndex = allRenderedImgs.indexOf(e.target);
-      showLightbox();
-    }
-  });
-}
+document.body.addEventListener('click', (e) => {
+  if (e.target.matches('#gallery-root img')) {
+    const allRenderedImgs = Array.from(document.querySelectorAll('#gallery-root img'));
+    currentPhotosList = allRenderedImgs.map(img => ({ src: img.src, alt: img.alt }));
+    currentIndex = allRenderedImgs.indexOf(e.target);
+    showLightbox();
+  }
+});
 
 function showLightbox() {
   if (!lightboxImg || !lightbox) return;
@@ -175,11 +172,27 @@ function showLightbox() {
   lightboxImg.alt = photo.alt;
   lightbox.classList.add('active');
   document.body.style.overflow = 'hidden';
+
+  // Request true monitor fullscreen mode
+  if (lightbox.requestFullscreen) {
+    lightbox.requestFullscreen().catch(() => {});
+  } else if (lightbox.webkitRequestFullscreen) {
+    lightbox.webkitRequestFullscreen();
+  }
 }
 
 function closeLightbox() {
   if (lightbox) lightbox.classList.remove('active');
   document.body.style.overflow = '';
+
+  // Exit monitor fullscreen mode if active
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    if (document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
 }
 
 function nextPhoto() {
@@ -211,7 +224,18 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowLeft') prevPhoto();
 });
 
+// Sync state if user exits fullscreen via browser native controls (F11 / Esc)
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
+    closeLightbox();
+  }
+});
+document.addEventListener('webkitfullscreenchange', () => {
+  if (!document.webkitFullscreenElement) {
+    closeLightbox();
+  }
+});
+
 translateInterface();
 initActiveCategoryUI();
 renderGallery();
-
