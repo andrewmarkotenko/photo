@@ -40,7 +40,7 @@ const translations = {
     callMe: "Appelez-moi",
     aboutText: "Photographe professionnel basé au Canada, spécialisé dans les portraits haut de gamme, l'art conceptuel et le storytelling lifestyle.",
     contactTitle: "Réserver une Session",
-    contactText: "Discutons de votre prochain project ou concept de séance photo.",
+    contactText: "Discutons de votre prochain projet ou concept de séance photo.",
     catHeadshots: "Portraits",
     catArt: "Art",
     catLifestyle: "Lifestyle",
@@ -51,7 +51,9 @@ const translations = {
 
 let currentLang = localStorage.getItem('site-lang') || 'en';
 let currentCategory = localStorage.getItem('site-category') || 'Headshots';
-let projectsDataMemory = []; // Local memory buffer cache for synced runtime reads
+
+// Directly seed memory with build-time static registry to prevent layout empty states on production
+let projectsDataMemory = staticProjects || []; 
 
 // Safely pull latest dataset from filesystem using runtime fallback checks
 async function fetchProjectsRegistry() {
@@ -152,7 +154,10 @@ function renderGallery() {
 
   const allImages = filteredProjects.flatMap(project => 
     (project.images || []).map(imgObj => ({
-      url: imgObj.url,
+      // Prepend repository base path on production environments to match build outDir delivery mapping
+      url: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? imgObj.url 
+        : `/photo/${imgObj.url}`,
       alt: imgObj.alt ? (imgObj.alt[currentLang] || imgObj.alt['en']) : translations[currentLang].photoAlt
     }))
   );
