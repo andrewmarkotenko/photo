@@ -54,18 +54,24 @@ p { color: #888; line-height: 1.8; font-size: 1.05rem; font-weight: 300; margin:
   transition: none !important;
 }
 
-/* Ensure background color persists in native monitor fullscreen mode */
 .lightbox:fullscreen {
   display: flex !important;
-  background: #060606;
+  background: #000000;
 }
 
 body .lightbox.active { display: flex !important; }
 
 .lightbox-content { 
-  max-width: 100vw; max-height: 100vh; width: auto; height: auto; object-fit: contain; 
+  max-width: 90vw; max-height: 85vh; width: auto; height: auto; object-fit: contain; 
   user-select: none; animation: sUp 0.2s cubic-bezier(0.25, 1, 0.5, 1); 
   transition: none !important;
+  cursor: zoom-in;
+}
+
+.lightbox:fullscreen .lightbox-content {
+  max-width: 100vw;
+  max-height: 100vh;
+  cursor: zoom-out;
 }
 
 .lightbox-close, .lightbox-nav { 

@@ -31,6 +31,21 @@ const translations = {
     catLifestyle: "Лайфстайл",
     catTheatre: "Театр",
     catNature: "Природа"
+  },
+  fr: {
+    mainTitle: "AndyMark Photographie",
+    noPhotos: "Aucune photo trouvée dans cette catégorie.",
+    photoAlt: "Photo du projet",
+    aboutTitle: "À Propos de Moi",
+    callMe: "Appelez-moi",
+    aboutText: "Photographe professionnel basé au Canada, spécialisé dans les portraits haut de gamme, l'art conceptuel et le storytelling lifestyle.",
+    contactTitle: "Réserver une Session",
+    contactText: "Discutons de votre prochain projet ou concept de séance photo.",
+    catHeadshots: "Portraits",
+    catArt: "Art",
+    catLifestyle: "Lifestyle",
+    catTheatre: "Théâtre",
+    catNature: "Nature"
   }
 };
 
@@ -154,6 +169,7 @@ const nextBtn = document.querySelector('.lightbox-nav.next');
 let currentIndex = 0;
 let currentPhotosList = [];
 
+// Step 1: Click on gallery image opens browser-level lightbox
 document.body.addEventListener('click', (e) => {
   if (e.target.matches('#gallery-root img')) {
     const allRenderedImgs = Array.from(document.querySelectorAll('#gallery-root img'));
@@ -172,20 +188,26 @@ function showLightbox() {
   lightboxImg.alt = photo.alt;
   lightbox.classList.add('active');
   document.body.style.overflow = 'hidden';
-
-  // Request true monitor fullscreen mode
-  if (lightbox.requestFullscreen) {
-    lightbox.requestFullscreen().catch(() => {});
-  } else if (lightbox.webkitRequestFullscreen) {
-    lightbox.webkitRequestFullscreen();
-  }
 }
 
-function closeLightbox() {
-  if (lightbox) lightbox.classList.remove('active');
-  document.body.style.overflow = '';
+// Step 2: Click on lightbox image triggers true monitor fullscreen mode
+if (lightboxImg) {
+  lightboxImg.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent closing lightbox when clicking the image
+    
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      if (lightbox.requestFullscreen) {
+        lightbox.requestFullscreen().catch(() => {});
+      } else if (lightbox.webkitRequestFullscreen) {
+        lightbox.webkitRequestFullscreen();
+      }
+    } else {
+      exitMonitorFullscreen();
+    }
+  });
+}
 
-  // Exit monitor fullscreen mode if active
+function exitMonitorFullscreen() {
   if (document.fullscreenElement || document.webkitFullscreenElement) {
     if (document.exitFullscreen) {
       document.exitFullscreen().catch(() => {});
@@ -193,6 +215,12 @@ function closeLightbox() {
       document.webkitExitFullscreen();
     }
   }
+}
+
+function closeLightbox() {
+  exitMonitorFullscreen();
+  if (lightbox) lightbox.classList.remove('active');
+  document.body.style.overflow = '';
 }
 
 function nextPhoto() {
@@ -208,8 +236,8 @@ function prevPhoto() {
 }
 
 if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
-if (nextBtn) nextBtn.addEventListener('click', nextPhoto);
-if (prevBtn) prevBtn.addEventListener('click', prevPhoto);
+if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); nextPhoto(); });
+if (prevBtn) prevBtn.addEventListener('click', (e) => { e.stopPropagation(); prevPhoto(); });
 
 if (lightbox) {
   lightbox.addEventListener('click', (e) => {
@@ -222,18 +250,6 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeLightbox();
   if (e.key === 'ArrowRight') nextPhoto();
   if (e.key === 'ArrowLeft') prevPhoto();
-});
-
-// Sync state if user exits fullscreen via browser native controls (F11 / Esc)
-document.addEventListener('fullscreenchange', () => {
-  if (!document.fullscreenElement) {
-    closeLightbox();
-  }
-});
-document.addEventListener('webkitfullscreenchange', () => {
-  if (!document.webkitFullscreenElement) {
-    closeLightbox();
-  }
 });
 
 translateInterface();
