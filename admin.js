@@ -24,8 +24,15 @@ app.get('/', (req, res) => {
       <title>Gallery Manager Admin</title>
       <style>
         body { font-family: -apple-system, sans-serif; background: #121212; color: #e0e0e0; margin: 0; padding: 30px; }
-        h1 { font-weight: 300; letter-spacing: 2px; color: #fff; border-bottom: 1px solid #222; padding-bottom: 15px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; margin-top: 20px; }
+        h1 { font-weight: 300; letter-spacing: 2px; color: #fff; border-bottom: 1px solid #222; padding-bottom: 15px; margin-bottom: 20px; }
+        
+        /* Tabs navigation design system */
+        .tabs-nav { display: flex; gap: 10px; border-bottom: 1px solid #222; padding-bottom: 15px; margin-bottom: 25px; flex-wrap: wrap; }
+        .tab-btn { background: #1e1e1e; border: 1px solid #2c2c2c; color: #aaa; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
+        .tab-btn:hover { background: #2a2a2a; color: #fff; }
+        .tab-btn.active { background: #0076ff; color: #fff; border-color: #0076ff; box-shadow: 0 0 10px rgba(0,118,255,0.3); }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
         .card { background: #1e1e1e; border: 1px solid #2c2c2c; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; }
         .img-container { width: 100%; height: 200px; background: #0a0a0a; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .img-container img { width: 100%; height: 100%; object-fit: contain; }
@@ -42,6 +49,9 @@ app.get('/', (req, res) => {
     </head>
     <body>
       <h1>Gallery Manager Dashboard</h1>
+      
+      <div id="tabs-root" class="tabs-nav"></div>
+      
       <div id="gallery-grid" class="grid">Loading items...</div>
       
       <div class="actions">
@@ -50,23 +60,54 @@ app.get('/', (req, res) => {
 
       <script>
         let currentManifest = {};
+        let cachedFilesList = [];
+        let currentActiveTab = 'Headshots';
         const categories = ["Headshots", "Art", "Lifestyle", "Theatre", "Nature", "Uncategorized"];
 
         async function loadAdminData() {
           const res = await fetch('/api/manifest');
           const data = await res.json();
           currentManifest = data.manifest;
-          renderGrid(data.files);
+          cachedFilesList = data.files;
+          
+          renderTabs();
+          renderGrid();
         }
 
-        function renderGrid(files) {
+        function renderTabs() {
+          const tabsContainer = document.getElementById('tabs-root');
+          tabsContainer.innerHTML = categories.map(cat => {
+            // Count current items allocated inside this partition context to show context density
+            const count = cachedFilesList.filter(file => {
+              const meta = currentManifest[file] || { category: 'Uncategorized' };
+              return meta.category.toLowerCase() === cat.toLowerCase();
+            }).length;
+
+            return \`<button class="tab-btn \${cat === currentActiveTab ? 'active' : ''}" onclick="switchTab('\${cat}')">\${cat} (\${count})</button>\`;
+          }).join('');
+        }
+
+        function switchTab(targetCategory) {
+          currentActiveTab = targetCategory;
+          renderTabs();
+          renderGrid();
+        }
+
+        function renderGrid() {
           const container = document.getElementById('gallery-grid');
-          if (files.length === 0) {
-            container.innerHTML = '<p style="color:#666;">No source images found in originals/ folder.</p>';
+          
+          // Filter records belonging strictly to the isolated layout workspace segment
+          const filteredFiles = cachedFilesList.filter(file => {
+            const meta = currentManifest[file] || { category: 'Uncategorized' };
+            return meta.category.toLowerCase() === currentActiveTab.toLowerCase();
+          });
+
+          if (filteredFiles.length === 0) {
+            container.innerHTML = \`<p style="color:#666; grid-column: 1/-1; py: 20px;">No images assigned to the "\${currentActiveTab}" tab partition context yet.</p>\`;
             return;
           }
 
-          container.innerHTML = files.map(file => {
+          container.innerHTML = filteredFiles.map(file => {
             const meta = currentManifest[file] || { category: 'Uncategorized' };
             
             const optionsHtml = categories.map(cat => 
@@ -82,35 +123,48 @@ app.get('/', (req, res) => {
                   <div style="font-size:0.85rem; color:#aaa; word-break:break-all; font-family:monospace; margin-bottom: 5px;">\${file}</div>
                   
                   <label>Category</label>
-                  <select class="field-category">\${optionsHtml}</select>
+                  <select class="field-category" onchange="updateLiveLocalState('\${file}', this.value)">\${optionsHtml}</select>
                 </div>
               </div>
             \`;
           }).join('');
         }
 
+        // Live mutation tracking helper to update internal dictionary reference before save submit sequence
+        function updateLiveLocalState(filename, targetCategory) {
+          if (!currentManifest[filename]) {
+            currentManifest[filename] = {};
+          }
+          currentManifest[filename].category = targetCategory;
+          
+          // Soft-reload navigation tabs text counts representation without resetting grid item focus pointers
+          renderTabs();
+        }
+
         async function saveManifest() {
           const saveBtn = document.getElementById('main-save-btn');
           if (saveBtn.disabled) return;
 
+          // Merge any newly rendered input selects present in current viewport DOM structure tree
           const cards = document.querySelectorAll('.card');
-          const updatedManifest = {};
-
           cards.forEach(card => {
             const filename = card.getAttribute('data-filename');
             const category = card.querySelector('.field-category').value;
             
-            // Retain existing title meta properties from old states to maintain backwards structural safety
-            const existingMeta = currentManifest[filename] || {};
-            const title = existingMeta.title || { en: '', uk: '', fr: '' };
-
-            updatedManifest[filename] = {
-              category: category,
-              title: title
-            };
+            if (!currentManifest[filename]) currentManifest[filename] = {};
+            currentManifest[filename].category = category;
           });
 
-          // Visual feedback: state saving
+          const finalizedManifest = {};
+          // Ensure all tracking references get deep cloned into serialization payload
+          for (const file of cachedFilesList) {
+            const existingMeta = currentManifest[file] || { category: 'Uncategorized' };
+            finalizedManifest[file] = {
+              category: existingMeta.category || 'Uncategorized',
+              title: existingMeta.title || { en: '', uk: '', fr: '' }
+            };
+          }
+
           saveBtn.disabled = true;
           saveBtn.textContent = 'Saving & Optimizing...';
 
@@ -118,22 +172,21 @@ app.get('/', (req, res) => {
             const response = await fetch('/api/manifest', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ manifest: updatedManifest })
+              body: JSON.stringify({ manifest: finalizedManifest })
             });
 
             if (response.ok) {
-              // Visual feedback: state success
               saveBtn.className = 'save-btn success';
               saveBtn.textContent = '✨ Saved & Synced!';
+              // Reload tracking manifest to match disk serialization state rules
+              await loadAdminData();
             } else {
               throw new Error('Failed to save');
             }
           } catch (err) {
-            // Visual feedback: state error
             saveBtn.className = 'save-btn error';
             saveBtn.textContent = '❌ Error';
           } finally {
-            // Reset button to default state after 2 seconds without blocking interaction
             setTimeout(() => {
               saveBtn.disabled = false;
               saveBtn.className = 'save-btn';
