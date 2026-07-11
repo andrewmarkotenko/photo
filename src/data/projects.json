@@ -3,7 +3,8 @@
     "id": "art-gallery",
     "title": {
       "en": "art Collection",
-      "uk": "Колекція art"
+      "uk": "Колекція art",
+      "fr": "art Collection"
     },
     "category": "art",
     "images": [
@@ -19,7 +20,8 @@
     "id": "headshots-gallery",
     "title": {
       "en": "headshots Collection",
-      "uk": "Колекція headshots"
+      "uk": "Колекція headshots",
+      "fr": "headshots Collection"
     },
     "category": "headshots",
     "images": [
@@ -36,7 +38,8 @@
     "id": "lifestyle-gallery",
     "title": {
       "en": "lifestyle Collection",
-      "uk": "Колекція lifestyle"
+      "uk": "Колекція lifestyle",
+      "fr": "lifestyle Collection"
     },
     "category": "lifestyle",
     "images": [
@@ -58,7 +61,8 @@
     "id": "me-gallery",
     "title": {
       "en": "me Collection",
-      "uk": "Колекція me"
+      "uk": "Колекція me",
+      "fr": "me Collection"
     },
     "category": "me",
     "images": [
@@ -70,7 +74,8 @@
     "id": "nature-gallery",
     "title": {
       "en": "nature Collection",
-      "uk": "Колекція nature"
+      "uk": "Колекція nature",
+      "fr": "nature Collection"
     },
     "category": "nature",
     "images": [
@@ -94,7 +99,8 @@
     "id": "theatre-gallery",
     "title": {
       "en": "theatre Collection",
-      "uk": "Колекція theatre"
+      "uk": "Колекція theatre",
+      "fr": "theatre Collection"
     },
     "category": "theatre",
     "images": [
